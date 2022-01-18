@@ -55,6 +55,15 @@ def get_people():
         st.write("Hourly Rate per Ether: ", db_list[number][3], "eth")
         st.text(" \n")
 
+def simplify_address(address):
+    """Return the first four and last four of a wallet address"""
+
+    length = len(address)
+    if length > 8:
+        return f'{address[0:4]}...{address[(length-4):length]}'
+    else:
+        return address
+
 ################################################################################
 # Streamlit Code
 
@@ -67,43 +76,44 @@ st.text(" \n")
 ################################################################################
 # Streamlit Sidebar Code - Start
 
-st.sidebar.markdown("## Client Account Address and Ethernet Balance in Ether")
+st.sidebar.markdown("## Client Account Info")
 account = generate_account()
 
 # Write the client's Ethereum account address to the sidebar
-st.sidebar.write(get_balance(w3, account.address))
+st.sidebar.write(f'**Balance**:  {get_balance(w3, account.address)} ETH')
 
+st.sidebar.markdown('---')
+st.sidebar.markdown('## Candidate Selection')
 # Create a select box to chose a FinTech Hire candidate
 person = st.sidebar.selectbox('Select a Person', people)
 
 # Create a input field to record the number of hours the candidate worked
-hours = st.sidebar.number_input("Number of Hours")
+hours = st.sidebar.number_input("Hours Worked")
 
-st.sidebar.markdown("## Candidate Name, Hourly Rate, and Ethereum Address")
-
+st.sidebar.markdown('---')
+st.sidebar.markdown('## Selected Candidate Info')
 # Identify the FinTech Hire candidate
 candidate = candidate_database[person][0]
 
 # Write the Fintech Finder candidate's name to the sidebar
-st.sidebar.write(candidate)
+st.sidebar.write(f'**Name**: {candidate}')
 
 # Identify the FinTech Finder candidate's hourly rate
 hourly_rate = candidate_database[person][3]
 
 # Write the inTech Finder candidate's hourly rate to the sidebar
-st.sidebar.write(hourly_rate)
+st.sidebar.write(f'**Hourly rate**: {hourly_rate}')
 
 # Identify the FinTech Finder candidate's Ethereum Address
 candidate_address = candidate_database[person][1]
 
 # Write the inTech Finder candidate's Ethereum Address to the sidebar
-st.sidebar.write(candidate_address)
+st.sidebar.write(f'**Address:** {simplify_address(candidate_address)}')
 
-st.sidebar.markdown("## Total Wage in Ether")
 wage  = hourly_rate * hours
-st.sidebar.write(wage)
+st.sidebar.write(f'**Total wage (ETH)**: {wage:,.8f}')
 
-if st.sidebar.button("Send Transaction"):
+if st.sidebar.button("Send Payment"):
 
     # Save the returned transaction hash as a variable named `transaction_hash`
     transaction_hash = send_transaction(w3, account, candidate_address, wage)
