@@ -5,7 +5,6 @@
 # customer in order to do the following:
 
 # * Generate a new Ethereum account instance by using your mnemonic seed phrase
-# (which you created earlier in the module).
 
 # * Fetch and display the account balance associated with your Ethereum account
 # address.
@@ -19,9 +18,7 @@
 # * Review the transaction hash code associated with the validated blockchain transaction.
 
 # Once you receive the transaction’s hash code, you will navigate to the Transactions
-# section of Ganache to review the blockchain transaction details. To confirm that
-# you have successfully created the transaction, you will save screenshots to the
-# README.md file of your GitHub repository for this Challenge assignment.
+# section of Ganache to review the blockchain transaction details. 
 
 
 # Imports
@@ -35,7 +32,6 @@ w3 = Web3(Web3.HTTPProvider('HTTP://127.0.0.1:7545'))
 # Fintech Finder Candidate Information
 
 # Database of Fintech Finder candidates including their name, digital address, rating and hourly cost per Ether.
-# A single Ether is currently valued at $1,500
 candidate_database = {
     "Lane": ["Lane", "0xaC8eB8B2ed5C4a0fC41a84Ee4950F417f67029F0", "4.3", .20, "Images/lane.jpeg"],
     "Ash": ["Ash", "0x2422858F9C4480c2724A309D58Ffd7Ac8bF65396", "5.0", .33, "Images/ash.jpeg"],
@@ -47,7 +43,7 @@ candidate_database = {
 people = ["Lane", "Ash", "Jo", "Kendall"]
 
 
-def get_people(w3):
+def get_people():
     """Display the database of Fintech Finders candidate information."""
     db_list = list(candidate_database.values())
 
@@ -204,7 +200,7 @@ if st.sidebar.button("Send Transaction"):
 
 # The function that starts the Streamlit application
 # Writes FinTech Finder candidates to the Streamlit page
-get_people(w3)
+get_people()
 
 ################################################################################
 # Step 3: Inspect the Transaction
