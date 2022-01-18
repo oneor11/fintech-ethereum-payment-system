@@ -46,6 +46,10 @@ The demo requires a local environment file that contains the 24 word mnemonic fo
 
  Note that the mnemonic should match what is in the running Ganache server.
 
+ ![screenshot of Ganache server](Images/ganache_mnemonic.png)
+
+ NOTE: DO NOT USE THIS MNEMONIC PHRASE OR ANY MNEMONIC PHRASE YOU GENERATE IN GANACHE ON A REAL-WORLD BLOCKCHAIN.  MNEMONICS, OR SEED PHRASES, SHOULD NEVER BE SHARED.  THEY SHOULD ALSO BE STORED NON-DIGITALLY AND GENERATED ON AN AIR-GAPPED DEVICE.  THE SEED PHRASE IS THE BASIS FOR PRIVATE KEY GENERATION AND THAT PRIVATE KEY IS THE KEY THAT GRANTS ACCESS TO ALL FUNDS ON THE BLOCKCHAIN.  IT MUST BE PROTECTED JUST LIKE ONE'S BANKING PIN NUMBERS.
+
 ### Running the app
 
 - Ensure Ganache is running
