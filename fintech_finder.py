@@ -67,6 +67,7 @@ def simplify_address(address):
 ################################################################################
 # Streamlit Code
 
+status = st.container()
 # Streamlit application headings
 st.markdown("# Fintech Finder!")
 st.markdown("## Hire A Fintech Professional!")
@@ -80,7 +81,10 @@ st.sidebar.markdown("## Client Account Info")
 account = generate_account()
 
 # Write the client's Ethereum account address to the sidebar
-st.sidebar.write(f'**Balance**:  {get_balance(w3, account.address)} ETH')
+balance_container = st.sidebar.empty()
+balance = get_balance(w3, account.address)
+balance_container.write(f'**Balance (ETH)**:  {balance:,.8f}')
+st.sidebar.write(f'**Address:** {simplify_address(account.address)}')
 
 st.sidebar.markdown('---')
 st.sidebar.markdown('## Candidate Selection')
@@ -90,8 +94,6 @@ person = st.sidebar.selectbox('Select a Person', people)
 # Create a input field to record the number of hours the candidate worked
 hours = st.sidebar.number_input("Hours Worked")
 
-st.sidebar.markdown('---')
-st.sidebar.markdown('## Selected Candidate Info')
 # Identify the FinTech Hire candidate
 candidate = candidate_database[person][0]
 
@@ -114,17 +116,18 @@ wage  = hourly_rate * hours
 st.sidebar.write(f'**Total wage (ETH)**: {wage:,.8f}')
 
 if st.sidebar.button("Send Payment"):
+    try:
+        if wage <= balance:
+            transaction_hash = send_transaction(w3, account, candidate_address, wage)
+            status.success(f'Payment successful.\n\nTransaction ID: {transaction_hash.hex()}')
+            balance = get_balance(w3, account.address)
+            balance_container.write(f'**Balance (ETH)**:  {balance:,.8f}')
+        else:
+            raise Exception('Insufficient funds.')
+    except Exception as e:
+        status.error(e)
 
-    # Save the returned transaction hash as a variable named `transaction_hash`
-    transaction_hash = send_transaction(w3, account, candidate_address, wage)
 
-    st.sidebar.markdown("#### Validated Transaction Hash")
-
-    # Write the returned transaction hash to the screen
-    st.sidebar.write(transaction_hash)
-
-    # Celebrate your successful payment
-    st.sidebar.success("Payment successful.")
 ################################################################################
 
 # Writes FinTech Finder candidates to the Streamlit page
