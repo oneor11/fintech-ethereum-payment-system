@@ -23,7 +23,7 @@
 # you have successfully created the transaction, you will save screenshots to the
 # README.md file of your GitHub repository for this Challenge assignment.
 
-################################################################################
+
 # Imports
 import streamlit as st
 from dataclasses import dataclass
@@ -31,28 +31,6 @@ from typing import Any, List
 from web3 import Web3
 from crypto_wallet import generate_account, get_balance, send_transaction
 w3 = Web3(Web3.HTTPProvider('HTTP://127.0.0.1:7545'))
-################################################################################
-# Step 1:
-# Import Ethereum Transaction Functions into the Fintech Finder Application
-
-# In this section, you'll import several functions from the `crypto_wallet.py`
-# script into the file `fintech_finder.py`, which contains code for Fintech
-# Finder’s customer interface, in order to add wallet operations to the
-# application. For this section, you will assume the perspective of a Fintech
-# Finder customer (i.e., you’ll provide your Ethereum wallet and account
-# information to the application).
-
-# Complete the following steps:
-
-# 4. Within the Streamlit sidebar section of code, create a variable named
-# `account`. Set this variable equal to a call on the `generate_account`
-# function. This function will create the Fintech Finder customer’s (in this
-# case, your) HD wallet and Ethereum account.
-
-# 5. Within this same section of the `fintech_finder.py` file, define a
-# new `st.sidebar.write` function that will display the balance of the
-# customer’s account. Inside this function, call the `get_balance` function
-# and pass it your Ethereum `account.address`.
 
 # Fintech Finder Candidate Information
 
@@ -93,34 +71,10 @@ st.text(" \n")
 # Streamlit Sidebar Code - Start
 
 st.sidebar.markdown("## Client Account Address and Ethernet Balance in Ether")
-
-##########################################
-# Step 1 - Part 4:
-# Create a variable named `account`. Set this variable equal to a call on the
-# `generate_account` function. This function will create the Fintech Finder
-# customer’s (in this case, your) HD wallet and Ethereum account.
-
-# @TODO:
-#  Call the `generate_account` function and save it as the variable `account`
-# YOUR CODE HERE
-
-##########################################
+account = generate_account()
 
 # Write the client's Ethereum account address to the sidebar
-st.sidebar.write(account.address)
-
-##########################################
-# Step 1 - Part 5:
-# Define a new `st.sidebar.write` function that will display the balance of the
-# customer’s account. Inside this function, call the `get_balance` function and
-#  pass it your Ethereum `account.address`.
-
-# @TODO
-# Call `get_balance` function and pass it your account address
-# Write the returned ether balance to the sidebar
-# YOUR CODE HERE
-
-##########################################
+st.sidebar.write(get_balance(w3, account.address))
 
 # Create a select box to chose a FinTech Hire candidate
 person = st.sidebar.selectbox('Select a Person', people)
@@ -209,11 +163,8 @@ st.sidebar.markdown("## Total Wage in Ether")
 # Calculate total `wage` for the candidate by multiplying the candidate’s hourly
 # rate from the candidate database (`candidate_database[person][3]`) by the
 # value of the `hours` variable
-# YOUR CODE HERE
-
-# @TODO
-# Write the `wage` calculation to the Streamlit sidebar
-# YOUR CODE HERE
+wage  = hourly_rate * hours
+st.sidebar.write(wage)
 
 ##########################################
 # Step 2 - Part 2:
@@ -240,7 +191,7 @@ if st.sidebar.button("Send Transaction"):
     # Call the `send_transaction` function and pass it 3 parameters:
     # Your `account`, the `candidate_address`, and the `wage` as parameters
     # Save the returned transaction hash as a variable named `transaction_hash`
-    # YOUR CODE HERE
+    transaction_hash = send_transaction(w3, account, candidate_address, wage)
 
     # Markdown for the transaction hash
     st.sidebar.markdown("#### Validated Transaction Hash")
@@ -253,7 +204,7 @@ if st.sidebar.button("Send Transaction"):
 
 # The function that starts the Streamlit application
 # Writes FinTech Finder candidates to the Streamlit page
-get_people()
+get_people(w3)
 
 ################################################################################
 # Step 3: Inspect the Transaction
